@@ -1,0 +1,6 @@
+:where(.css-dev-only-do-not-override-cdzvx5).ant-form-item .ant-form-item-control-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 0px; /* Set your desired min-height here */
+}
