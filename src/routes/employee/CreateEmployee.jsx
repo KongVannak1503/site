@@ -5,7 +5,7 @@ import { DollarCircleFilled } from '@ant-design/icons';
 import { CloudUpload } from 'lucide-react';
 import { checkIdExistsApi, createEmployeeApi } from '../../components/apis/EmployeeApi';
 import { Option } from 'antd/es/mentions';
-import { employeeTypes, maritalStatuses, businessAddresses, Salutation, Gender, SAVE_ICON } from '../../components/utils/Constants'
+import { employeeTypes, maritalStatuses, businessAddresses, Salutation, Gender, SAVE_ICON, constLanguages } from '../../components/utils/Constants'
 import { getDepartmentApi } from '../../components/apis/DepartmentApi';
 import { getDesignationApi } from '../../components/apis/DesignationApi';
 import { getRoleApi } from '../../components/apis/RoleApi';
@@ -168,7 +168,22 @@ const CreateEmployee = ({ onUserCreated, onClose }) => {
                             label={translate('language')}
                             rules={[{ required: true, message: 'Language is required' }]}
                         >
-                            <Input placeholder="Enter Language" />
+                            <Select
+                                mode="multiple"
+                                showSearch
+                                style={{ flex: "1 1 auto", minWidth: "0" }} // Prevents breaking
+                                optionFilterProp="children"
+                                maxTagCount="responsive" // Keeps selected items inline
+                                filterOption={(input, option) =>
+                                    option.children.toLowerCase().includes(input.toLowerCase())
+                                }
+                            >
+                                {constLanguages.map((role) => (
+                                    <Select.Option key={role.name} value={role.name}>
+                                        {role.name}
+                                    </Select.Option>
+                                ))}
+                            </Select>
                         </Form.Item>
 
 
@@ -305,15 +320,6 @@ const CreateEmployee = ({ onUserCreated, onClose }) => {
                     ]}
                 >
                     <Input.Password placeholder="Confirm new password" />
-                </Form.Item>
-                <Form.Item name="role" label={translate('role')} rules={[{ required: true, message: 'Role is required' }]}>
-                    <Select placeholder="Select a role">
-                        {roles.map((role) => (
-                            <Select.Option key={role._id} value={role._id}>
-                                {role.name}
-                            </Select.Option>
-                        ))}
-                    </Select>
                 </Form.Item>
             </div>
             <div className="w-full">

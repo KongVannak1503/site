@@ -101,10 +101,15 @@ const JobApplication = () => {
 
     const openRightModal = (form, dataId) => {
         setActiveForm(form);
+        setLoading(true);
         if (form === "formUpdate") {
             setUpdateUserId(dataId);
         }
-        setIsModalOpen(true);
+        setTimeout(() => {
+            setLoading(false);
+            setIsModalOpen(true);
+        }, 300);
+
     };
 
     const closeModal = () => {

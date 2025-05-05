@@ -51,6 +51,7 @@ const InterviewSchedule = () => {
                 const formattedEvents = response.map(event => ({
                     id: event._id,
                     title: event.interviewId.name,
+                    name: event.jobId.name,
                     start: new Date(formatDateAndTimePoint(event.startDate, event.startTime))
                 }));
                 setEvents(formattedEvents);
@@ -94,6 +95,7 @@ const InterviewSchedule = () => {
             setEvents(data.map(event => ({
                 id: event._id,
                 title: event.interviewId.name,
+                name: event.jobId.name,
                 start: new Date(formatDateAndTimePoint(event.startDate, event.startTime))
             })));
         } else {
@@ -106,6 +108,7 @@ const InterviewSchedule = () => {
             setEvents(filtered.map(event => ({
                 id: event._id,
                 title: event.interviewId.name,
+                name: event.jobId.name,
                 start: new Date(formatDateAndTimePoint(event.startDate, event.startTime))
             })));
         }
@@ -114,10 +117,14 @@ const InterviewSchedule = () => {
 
     const openRightModal = (form, dataId) => {
         setActiveForm(form);
+        setLoading(true);
         if (form === "formUpdate") {
             setUpdateUserId(dataId);
         }
-        setIsModalOpen(true);
+        setTimeout(() => {
+            setLoading(false);
+            setIsModalOpen(true);
+        }, 300);
     };
 
     const closeModal = () => {
@@ -137,6 +144,7 @@ const InterviewSchedule = () => {
             setEvents([...events, {
                 id: newUser._id,
                 title: newUser.interviewId.name,
+                name: newUser.jobId.name,
                 start: new Date(formatDateAndTimePoint(newUser.startDate, newUser.startTime))
             }]);
 
@@ -160,7 +168,7 @@ const InterviewSchedule = () => {
             setFilteredData([updatedRole, ...updatedList]); // Same for filtered data
 
             const updatedEvents = events.map((event) =>
-                event.id === updatedData._id ? { ...event, title: updatedData.interviewId.name, start: new Date(formatDateAndTimePoint(updatedData.startDate, updatedData.startTime)) } : event
+                event.id === updatedData._id ? { ...event, title: updatedData.interviewId.name, name: updatedData.jobId.name, start: new Date(formatDateAndTimePoint(updatedData.startDate, updatedData.startTime)) } : event
             );
 
             setEvents(updatedEvents);
@@ -382,27 +390,21 @@ const InterviewSchedule = () => {
                                 <div className="md:p-4 md:pr-0">
                                     <h3 className="text-xl font-medium text-center mb-7">{headTitle}</h3>
                                     <div>
-                                        {filteredData.length > 0 ? (
-                                            filteredData.map((value) => (
+                                        {events.length > 0 ? (
+                                            events.map((value) => (
 
                                                 <Card
                                                     style={{ marginBottom: '10px' }}
-                                                    key={value._id}
+                                                    key={value.id}
                                                     actions={[
                                                         <Tooltip key="reschedule" title="Reschedule">
-                                                            <span>
-                                                                <RedoOutlined />
-                                                            </span>
+                                                            <span><RedoOutlined /></span>
                                                         </Tooltip>,
                                                         <Tooltip key="edit" title="Edit">
-                                                            <span>
-                                                                <EditOutlined onClick={() => openRightModal("formUpdate", value._id)} />
-                                                            </span>
+                                                            <span onClick={() => openRightModal("formUpdate", value.id)}><EditOutlined /></span>
                                                         </Tooltip>,
                                                         <Tooltip key="delete" title="Delete">
-                                                            <span>
-                                                                <DeleteOutlined onClick={() => localHandleDelete(value._id)} />
-                                                            </span>
+                                                            <span onClick={() => localHandleDelete(value.id)}><DeleteOutlined /></span>
                                                         </Tooltip>,
                                                     ]}
                                                 >
@@ -412,27 +414,26 @@ const InterviewSchedule = () => {
                                                                 <button
                                                                     className="border-b-1 border-gray-500"
                                                                 >
-                                                                    {getMonthFromDate(value.startDate)}
+                                                                    {getMonthFromDate(value.start)}
                                                                 </button>
                                                                 <button
                                                                     className={`px-2 text-white}`}
                                                                 >
-                                                                    {getDayFromDate(value.startDate)}
+                                                                    {getDayFromDate(value.start)}
                                                                 </button>
                                                             </div>
 
                                                         </div>
                                                         <div>
-                                                            <p className="text-base">{value.interviewId.name}</p>
+                                                            <p className="text-base">{value.startDate}</p>
                                                             <p className="text-sm text-gray-400">
-                                                                {formatDateAndTimePoint(value.startDate, value.startTime)}
+                                                                {formatDateAndTimePoint(value.start, value.start)}
                                                             </p>
                                                             <p className="text-sm text-gray-400">
-                                                                {value.jobId.name}
+                                                                {value.name}
                                                             </p>
                                                         </div>
                                                     </div>
-
                                                 </Card>
                                             ))
                                         ) : (
@@ -445,13 +446,9 @@ const InterviewSchedule = () => {
                     </div>
 
                 )}
-
-                {/* Table outside of the grid */}
                 {view === 'Kanban' && (
                     loading ? (
-                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }} >
-                            <Spin size="large" />
-                        </div>
+                        ""
                     ) : (
                         <div className="overflow-auto">
                             <Table

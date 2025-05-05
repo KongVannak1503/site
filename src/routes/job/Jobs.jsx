@@ -18,6 +18,8 @@ import UpdateJob from './UpdateJob';
 import CreateJob from './CreateJob';
 import { deleteJobApi, getJobApi, updateJobStatusApi } from '../../components/apis/JobApi';
 import { uploadImage } from '../../components/apis/UploadImageApi';
+import { useLanguage } from '../../components/layouts/LanguageContext';
+import { translate } from '../../components/utils/translations';
 
 const Jobs = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,13 +34,14 @@ const Jobs = () => {
     const [pageSize, setPageSize] = useState(10);
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(false);
+    const { language } = useLanguage();
 
     const handleShowSizeChange = (current, size) => {
         setPageSize(size);
     };
 
     useEffect(() => {
-        document.title = "Jobs";
+        document.title = translate('jobs');
         setLoading(true);
         const timeoutId = setTimeout(() => {
             setLoading(true);
@@ -74,7 +77,7 @@ const Jobs = () => {
             }
         };
         fetchData();
-    }, [token]);
+    }, [token, language]);
 
     const canCreateUser = permissions['/jobs']?.includes('create');
     const canUpdateUser = permissions['/jobs']?.includes('update');
@@ -94,11 +97,16 @@ const Jobs = () => {
     };
 
     const openRightModal = (form, dataId) => {
+        setLoading(true);
         setActiveForm(form);
         if (form === "formUpdate") {
             setUpdateUserId(dataId);
         }
-        setIsModalOpen(true);
+        setTimeout(() => {
+            setLoading(false);
+            setIsModalOpen(true);
+        }, 300);
+
     };
 
     const closeModal = () => {
@@ -162,13 +170,13 @@ const Jobs = () => {
 
     const columns = [
         {
-            title: "Job Title",
+            title: translate('jobTitle'),
             dataIndex: "name",
             key: "name",
             render: (text) => <span>{text}</span>,
         },
         {
-            title: "Recruiter",
+            title: translate('recruiter'),
             dataIndex: "employeeId",
             key: "employeeId",
             render: (text, record) => (
@@ -183,19 +191,19 @@ const Jobs = () => {
             ),
         },
         {
-            title: "Start Date",
+            title: translate('startDate'),
             dataIndex: "startDate",
             key: "startDate",
             render: (text) => <span>{dayjs(text).format("DD-MM-YYYY")}</span>,
         },
         {
-            title: "End Date",
+            title: translate('endDate'),
             dataIndex: "endDate",
             key: "endDate",
             render: (text) => <span>{dayjs(text).format("DD-MM-YYYY")}</span>,
         },
         {
-            title: "Status",
+            title: translate('status'),
             key: "status",
             dataIndex: "status",
             render: (status, record) => {
@@ -240,7 +248,7 @@ const Jobs = () => {
         {
             title: (
                 <span style={{ display: "flex", justifyContent: "center", width: "100%" }}>
-                    Action
+                    {translate('action')}
                 </span>
             ),
             key: "action",
@@ -274,7 +282,7 @@ const Jobs = () => {
     return (
         <Layout>
             <Breadcrumb
-                items={[{ title: <span onClick={() => navigate("/dashboard")} style={{ cursor: "pointer", color: "#000" }}>Home</span> }, { title: <span style={{ cursor: "pointer", color: "#3a3a3a" }}>Jobs</span> }]}
+                items={[{ title: <span onClick={() => navigate("/dashboard")} style={{ cursor: "pointer", color: "#000" }}>{translate('home')}</span> }, { title: <span style={{ cursor: "pointer", color: "#3a3a3a" }}>{translate('jobs')}</span> }]}
                 style={{ margin: "16px 0" }}
             />
             <Content
@@ -287,11 +295,11 @@ const Jobs = () => {
                 }}
             >
                 <div className="flex justify-between pb-5">
-                    <h2 className={Styles.headTitle}>Job Application</h2>
+                    <h2 className={Styles.headTitle}>{translate('jobs')}</h2>
                     <div className="flex items-center gap-4">
                         <div>
                             <Input
-                                placeholder="Search..."
+                                placeholder={translate('search')}
                                 suffix={<SearchOutlined />}
                                 value={searchText}
                                 onChange={(e) => handleSearch(e.target.value)}
@@ -303,7 +311,7 @@ const Jobs = () => {
                                 onClick={() => openRightModal("form")}
                                 disabled={!canCreateUser}
                             >
-                                {NEW_USER} Job
+                                {NEW_USER} {translate('enterAdd')}  {translate('job')}{translate('endNew')}
                             </button>
 
                         </div>
@@ -319,7 +327,7 @@ const Jobs = () => {
                         columns={columns}
                         pagination={{
                             position: ["bottomRight"],
-                            showTotal: (total, range) => `${range[0]}${PAGINATION_SPACE}${range[1]} of ${total} ${PAGINATION_TITLE}`,
+                            showTotal: (total, range) => `${range[0]} ${translate('to')} ${range[1]} ${translate('of')} ${total} ${translate('entries')}`,
                             pageSizeOptions: ["10", "15", "20", "25", "30", "50"],
                             showSizeChanger: true,
                             onShowSizeChange: handleShowSizeChange,
@@ -338,7 +346,7 @@ const Jobs = () => {
                         }}
                     />
                 )}
-                <CenterSlideModalLg isOpen={isModalOpen} onClose={closeModal} title={activeForm === "formUpdate" ? "Edit Job" : "Add New Job"}>
+                <CenterSlideModalLg isOpen={isModalOpen} onClose={closeModal} title={activeForm === "formUpdate" ? `${translate('update')} ${translate('jobs')}` : `${translate('add')} ${translate('jobs')}${translate('new')}`}>
                     {activeForm === "form" && <CreateJob onUserCreated={handleAddCreated} onClose={closeModal} />}
                     {activeForm === "formUpdate" && updateUserId && (
                         <UpdateJob userId={updateUserId} onUserUpdated={handleUpdate} onClose={closeModal} />

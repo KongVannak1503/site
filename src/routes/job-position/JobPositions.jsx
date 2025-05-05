@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Breadcrumb, Layout, Table, Space, Input, Badge, Checkbox, Spin } from "antd";
+import { Breadcrumb, Layout, Table, Space, Input, Badge, Checkbox, Spin, Select, message } from "antd";
 import { Content } from "antd/es/layout/layout";
 import { useNavigate } from "react-router-dom";
 import { Styles } from "../../components/utils/CustomStyle";
@@ -11,9 +11,9 @@ import {
 import CenterSlideModalLg from "../../components/modals/ModalCenterLg";
 import SweetAlertDelete from "../../components/utils/SweetAlertDelete";
 import jwt_decode from 'jwt-decode';
-import { EDIT_USER, NEW_USER } from '../../components/utils/Constants';
+import { applicationStatuses, defaultStatuses, EDIT_USER, NEW_USER } from '../../components/utils/Constants';
 import CreateJobPosition from './CreatePosition';
-import { deleteJobPositionApi, getJobPositionApi } from '../../components/apis/JobPositionApi';
+import { deleteJobPositionApi, getJobPositionApi, updateJobPositionStatusApi } from '../../components/apis/JobPositionApi';
 import UpdateJobPosition from './UpdatePosition';
 
 const JobPositions = () => {
@@ -89,10 +89,15 @@ const JobPositions = () => {
 
     const openRightModal = (form, dataId) => {
         setActiveForm(form);
+        setLoading(true);
+
         if (form === "formUpdate") {
             setUpdateUserId(dataId);
         }
-        setIsModalOpen(true);
+        setTimeout(() => {
+            setLoading(false);
+            setIsModalOpen(true);
+        }, 200);
     };
 
     const closeModal = () => {
@@ -160,6 +165,20 @@ const JobPositions = () => {
         }
     };
 
+    const handleStatusChange = async (newStatus, applicationId) => {
+        try {
+            await updateJobPositionStatusApi(applicationId, newStatus);
+            const updatedData = data.map((item) =>
+                item._id === applicationId ? { ...item, status: newStatus } : item
+            );
+            setData(updatedData);
+            setFilteredData(updatedData);
+            message.success('Status updated successfully!');
+        } catch (error) {
+            console.error("Error updating status:", error);
+        }
+    };
+
 
     const columns = [
         {
@@ -185,13 +204,47 @@ const JobPositions = () => {
             render: (text) => <span>{text}</span>,
         },
         {
-            title: 'Status',
-            key: 'isActive',
-            render: (record) => (<Badge status={record.isActive == true ? "success" : "warning"}
-                text={
-                    record.isActive == true ? "Active" : "Inactive"
-                }
-            />),
+            title: "Status",
+            key: "isActive",
+            dataIndex: "isActive",
+            render: (status, record) => {
+                return (
+                    <div>
+                        <Select
+                            defaultValue={status}
+                            className="w-[190px]"
+                            placeholder="Select a status"
+                            showSearch
+                            optionFilterProp="label"
+                            filterOption={(input, option) =>
+                                option?.label?.toLowerCase().includes(input.toLowerCase())
+                            }
+                            onChange={(newStatus) => handleStatusChange(newStatus, record._id)}
+                        >
+                            {defaultStatuses.map((status) => (
+                                <Select.Option
+                                    key={status.name}
+                                    value={status.value}
+                                    label={status.name}
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <span
+                                            style={{
+                                                display: "inline-block",
+                                                width: "10px",
+                                                height: "10px",
+                                                borderRadius: "50%",
+                                                backgroundColor: status.color,
+                                            }}
+                                        />
+                                        <span>{status.name}</span>
+                                    </div>
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </div>
+                );
+            },
         },
 
         {

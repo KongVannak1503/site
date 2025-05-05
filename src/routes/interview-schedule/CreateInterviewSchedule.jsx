@@ -8,6 +8,7 @@ import { getCategoryApi } from "../../components/apis/CategoryApi";
 import { getEmployeeApi } from "../../components/apis/EmployeeApi";
 import { getRoundApi } from "../../components/apis/RoundApi";
 import { interviewType, remindType } from "../../components/utils/Constants";
+import { Styles } from "../../components/utils/CustomStyle";
 
 
 const CreateInterviewSchedule = ({ onUserCreated, onClose }) => {
@@ -227,12 +228,12 @@ const CreateInterviewSchedule = ({ onUserCreated, onClose }) => {
                     </Form.Item>
                 </div>
             )}
-            <Button type="primary" htmlType="submit" loading={loading} >
+            <button type="submit" className={Styles.btnCreate} loading={loading} >
                 Save
-            </Button>
-            <Button onClick={onClose} className="ml-3">
+            </button>
+            <button onClick={onClose} className={Styles.btnCancel}>
                 Cancel
-            </Button>
+            </button>
         </Form >
     );
 };

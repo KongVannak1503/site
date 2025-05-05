@@ -71,6 +71,20 @@ export const viewJobApi = async (id) => {
     }
 };
 
+export const viewJobUpdateApi = async (id) => {
+    try {
+        const response = await axios.get(`${API_URL}jobs/view/${id}`, {
+            headers: {
+                'Authorization': TOKEN,
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching roles:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
 export const deleteJobApi = async (id) => {
     try {
         const response = await axios.delete(`${API_URL}jobs/${id}`, {

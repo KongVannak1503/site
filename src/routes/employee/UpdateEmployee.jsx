@@ -305,15 +305,6 @@ const UpdateEmployee = ({ userId, onUserUpdated, onClose }) => {
                     <Input.Password placeholder="Confirm new password" />
                 </Form.Item>
 
-                <Form.Item name="role" label="Role" rules={[{ required: true, message: 'Role is required' }]}>
-                    <Select placeholder="Select a role">
-                        {roles.map(role => (
-                            <Select.Option key={role._id} value={role._id}>
-                                {role.name}
-                            </Select.Option>
-                        ))}
-                    </Select>
-                </Form.Item>
             </div>
 
             <div className="w-full">
@@ -330,7 +321,7 @@ const UpdateEmployee = ({ userId, onUserUpdated, onClose }) => {
                     name="about"
                     label="About"
                 >
-                    <Input.TextArea placeholder="Enter About" />
+                    <Input.TextArea rows={5} placeholder="Enter About" />
                 </Form.Item>
             </div>
 

@@ -16,12 +16,7 @@ const getMenuItems = () => {
             label: translate('employees'),
             path: '/employees'
         },
-        {
-            key: 'attendances',
-            icon: <UserOutlined />,
-            label: translate('attendances'),
-            path: '/attendances'
-        },
+
         {
             key: 'sub6',
             icon: <NotificationOutlined />,
@@ -31,7 +26,7 @@ const getMenuItems = () => {
                 { key: '20', label: translate('jobApplications'), path: '/job-application' },
                 { key: 'job-position', label: translate('jobPositions'), path: '/job-positions' },
                 { key: '21', label: translate('interviewSchedules'), path: '/interview-schedule' },
-                { key: '25', label: translate('recruitReport'), path: '/recruit-report' },
+                { key: '25', label: translate('reports'), path: '/recruit-report' },
             ],
         },
         {

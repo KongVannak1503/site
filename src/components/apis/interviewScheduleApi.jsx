@@ -69,6 +69,20 @@ export const viewInterviewScheduleApi = async (id) => {
     }
 };
 
+export const viewInterviewScheduleUpdateApi = async (id) => {
+    try {
+        const response = await axios.get(`${API_URL}interview-schedule/view/${id}`, {
+            headers: {
+                'Authorization': TOKEN,
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching :', error.response?.data || error.message);
+        throw error;
+    }
+};
+
 export const deleteInterviewScheduleApi = async (id) => {
     try {
         const response = await axios.delete(`${API_URL}interview-schedule/${id}`, {

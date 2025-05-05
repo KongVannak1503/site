@@ -121,3 +121,17 @@ export const checkEmailExistsApi = async (email) => {
         throw error;
     }
 };
+
+export const updateEmployeeStatusApi = async (id, isActive) => {
+    try {
+        const response = await axios.put(`${API_URL}employees/status/${id}`, { isActive }, {
+            headers: {
+                'Authorization': TOKEN,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error(`Error updating job application with ID ${id}:`, error);
+        throw error;
+    }
+}

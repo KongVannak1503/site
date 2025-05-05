@@ -32,6 +32,29 @@ export const Salutation = [
     { name: "Dr." },
     { name: "Prof." }
 ];
+export const constLanguages = [
+    { name: "Khmer" },
+    { name: "English" },
+    { name: "French" },
+    { name: "Spanish" },
+    { name: "German" },
+    { name: "Chinese" },
+    { name: "Japanese" },
+    { name: "Korean" },
+    { name: "Russian" },
+    { name: "Italian" },
+    { name: "Portuguese" },
+    { name: "Arabic" },
+    { name: "Hindi" },
+    { name: "Bengali" },
+    { name: "Turkish" },
+    { name: "Vietnamese" },
+    { name: "Thai" },
+    { name: "Indonesian" },
+    { name: "Malay" },
+    { name: "Tagalog" }
+];
+
 
 export const Gender = [
     { name: "Male" },

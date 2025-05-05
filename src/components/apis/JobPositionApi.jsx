@@ -70,3 +70,17 @@ export const deleteJobPositionApi = async (id) => {
         throw error;
     }
 };
+
+export const updateJobPositionStatusApi = async (id, isActive) => {
+    try {
+        const response = await axios.put(`${API_URL}job-positions/status/${id}`, { isActive }, {
+            headers: {
+                'Authorization': TOKEN,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error(`Error updating job position with ID ${id}:`, error);
+        throw error;
+    }
+};

@@ -10,8 +10,12 @@ const translations = {
         employee: 'Employee',
         attendances: 'Attendances',
         recruit: 'Recruit',
+        recruiter: 'Recruiter',
         jobs: 'Jobs',
+        job: 'Job',
+        jobTitle: 'Job Title',
         jobApplications: 'Job Applications',
+        jobApplication: 'Job Application',
         jobPositions: 'Job Positions',
         interviewSchedules: 'Interview Schedules',
         reports: 'Reports',
@@ -89,6 +93,11 @@ const translations = {
         username: 'Username',
         entries: 'entries',
         of: 'of',
+        to: 'to',
+        startDate: 'Start Date',
+        endDate: 'End Date',
+        enterAdd: 'New ',
+        endNew: ' ',
     },
     km: {
         home: 'ផ្ទាំងដើម',
@@ -97,8 +106,12 @@ const translations = {
         employee: 'បុគ្គលិក',
         attendances: 'វត្តមាន',
         recruit: 'ការជ្រើសរើស',
+        recruiter: 'អ្នកជ្រើសរើសបុគ្គលិក',
         jobs: 'ការងារ',
+        job: 'ការងារ',
+        jobTitle: 'ចំណងជើងការងារ',
         jobApplications: 'ការដាក់ពាក្យការងារ',
+        jobApplication: 'ការដាក់ពាក្យការងារ',
         jobPositions: 'តួនាទីការងារ',
         interviewSchedules: 'កាលវិភាគសម្ភាសន៍',
         reports: 'របាយការណ៍',
@@ -176,22 +189,23 @@ const translations = {
         addNew: 'បញ្ចូលថ្មី',
         entries: 'ចំនួនសរុប',
         of: 'នៃ',
+        to: 'ទៅ',
+        startDate: 'កាលបរិច្ឆេទចាប់ផ្តើម',
+        endDate: 'កាលបរិច្ឆេទបញ្ចប់',
+        enterAdd: 'បញ្ចូល​',
+        endNew: 'ថ្មី',
     }
 };
 export const getLanguage = () => {
-    const language = localStorage.getItem('language') || 'en'; // Example of getting language from localStorage, default to 'en'
-    return language; // Ensure this returns a string like 'en', 'fr', etc.
+    const language = localStorage.getItem('language') || 'en';
+    return language;
 };
-
-// Function to change the language (without navigation)
 export const setLanguage = (lang) => {
     localStorage.setItem('lang', lang);
 };
 
 export const translate = (key) => {
     const lang = getLanguage();
-
-    // Fallback to 'en' if the language is invalid or missing
     if (!translations[lang]) {
         return translations['en'][key] || key;
     }

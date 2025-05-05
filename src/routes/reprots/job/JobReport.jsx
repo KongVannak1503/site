@@ -1,6 +1,9 @@
 import React from "react";
-import { Table, Button } from "antd";
+import { Table, Button, Layout, Breadcrumb } from "antd";
 import { PDFDownloadLink, Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import { Content } from "antd/es/layout/layout";
+import { Navigate } from "react-router-dom";
+import { translate } from "../../../components/utils/Translations";
 
 // Shared employee data
 const employeeData = [
@@ -32,13 +35,22 @@ const PDFDocument = () => (
         <Page size="A4" style={styles.page}>
             <Text style={styles.title}>Employee Performance Report</Text>
             <View style={styles.table}>
-                <View style={styles.tableRow}>
-                    <Text style={styles.headerCell}>Employee Name</Text>
-                    <Text style={styles.headerCell}>Department</Text>
-                    <Text style={styles.headerCell}>Performance</Text>
+                {/* Table Header */}
+                <View style={[styles.tableRow, styles.headerRow]}>
+                    <Text style={[styles.cell, styles.headerCell]}>Employee Name</Text>
+                    <Text style={[styles.cell, styles.headerCell]}>Department</Text>
+                    <Text style={[styles.cell, styles.headerCell]}>Performance</Text>
                 </View>
-                {employeeData.map((item) => (
-                    <View style={styles.tableRow} key={item.key}>
+
+                {/* Table Rows */}
+                {employeeData.map((item, index) => (
+                    <View
+                        key={item.key}
+                        style={[
+                            styles.tableRow,
+                            index % 2 === 0 ? styles.evenRow : styles.oddRow,
+                        ]}
+                    >
                         <Text style={styles.cell}>{item.name}</Text>
                         <Text style={styles.cell}>{item.department}</Text>
                         <Text style={styles.cell}>{item.performance}</Text>
@@ -49,28 +61,52 @@ const PDFDocument = () => (
     </Document>
 );
 
+
 // Main component
 const PDFGenerator = () => {
     return (
-        <div style={{ padding: 20 }}>
-            <h2>Employee Performance Report</h2>
-
-            {/* Ant Design Table */}
-            <Table
-                columns={columns}
-                dataSource={employeeData}
-                pagination={false}
-                bordered
-                style={{ marginBottom: 20 }}
+        <Layout>
+            <Breadcrumb
+                items={[{ title: <span onClick={() => Navigate("/dashboard")} style={{ cursor: "pointer", color: "#000" }}>{translate('home')}</span> }, { title: <span style={{ cursor: "pointer", color: "#3a3a3a" }}>{translate('jobs')}</span> }]}
+                style={{ margin: "16px 0" }}
             />
+            <Content
+                style={{
+                    padding: 24,
+                    margin: 0,
+                    minHeight: 280,
+                    background: "#fff",
+                    borderRadius: "8px",
+                }}
+            >
+                <div style={{ padding: 20 }}>
+                    <h2>Employee Performance Report</h2>
 
-            {/* PDF Download Link */}
-            <PDFDownloadLink document={<PDFDocument />} fileName="employee-performance-report.pdf">
-                {({ loading }) => (
-                    <Button type="primary">{loading ? "Generating PDF..." : "Download PDF"}</Button>
-                )}
-            </PDFDownloadLink>
-        </div>
+                    {/* Ant Design Table */}
+                    <Table
+                        columns={columns}
+                        dataSource={employeeData}
+                        pagination={false}
+                        rowKey={(record) => record._id || record.username}
+                        scroll={{ x: 'max-content' }}
+                        components={{
+                            body: {
+                                cell: (props) => (
+                                    <td {...props} style={{ paddingTop: "8px", paddingBottom: "8px" }} />
+                                ),
+                            },
+                        }}
+                    />
+
+                    {/* PDF Download Link */}
+                    <PDFDownloadLink document={<PDFDocument />} fileName="employee-performance-report.pdf">
+                        {({ loading }) => (
+                            <Button type="primary">{loading ? "Generating PDF..." : "Download PDF"}</Button>
+                        )}
+                    </PDFDownloadLink>
+                </div>
+            </Content>
+        </Layout >
     );
 };
 

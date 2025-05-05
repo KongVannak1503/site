@@ -1,5 +1,13 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Battambang:wght@100;300;400;700;900&family=Hanuman:wght@100;300;400;700;900&family=Siemreap&display=swap');
+body, html {
+    font-family: "Siemreap", sans-serif !important;
+}
 
+/* Apply the font to all text elements */
+h1, h2, h3, p, span, div, a, li, table, th, td {
+    font-family: "Siemreap", sans-serif !important;
+}
 :root {
     --primary-color: #003369;
     --primary-color-hover: #004690;
