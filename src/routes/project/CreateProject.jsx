@@ -6,7 +6,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { getCategoryApi } from "../../components/apis/CategoryApi";
 import CenterSlideModal from "../../components/modals/ModalCenter";
-import CreateCategory from "../category/CreateCategory";
+import CreateCategory from "../setting/category/CreateCategory";
 import { getDepartmentApi } from "../../components/apis/DepartmentApi";
 import { getEmployeeApi } from "../../components/apis/EmployeeApi";
 import { uploadImage } from "../../components/apis/UploadImageApi";

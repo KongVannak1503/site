@@ -86,10 +86,11 @@ const HeaderComponent = ({ toggleCollapsed }) => {
                     <MenuFoldOutlined />
                 </p>
                 <div>
-                    <img style={{ height: '55px' }} src={uploadImage('uploads/logo.png')} alt="" />
+                    <img className='hidden md:inline' style={{ height: '55px' }} src={uploadImage('uploads/logo.png')} alt="" />
+                    <img className='md:hidden' style={{ height: '40px' }} src={uploadImage('uploads/usea_logo_s.png')} alt="" />
                 </div>
             </div>
-            <div >
+            <div className='hidden md:inline '>
                 <Select
                     showSearch
                     value={searchTerm}
@@ -133,12 +134,12 @@ const HeaderComponent = ({ toggleCollapsed }) => {
                         onChange={handleLanguageChange}
                         className="w-[50px] py-1 rounded"
                         suffixIcon={null}
-                        bordered={false}
+                        variant="borderless"
                     >
-                        <Option value="en" className=' px-0'>
+                        <Select.Option value="en" className=' px-0'>
                             <img src={uploadImage('uploads/en.png')} alt="English" className="" />
-                        </Option>
-                        <Option value="km"><img src={uploadImage('uploads/km.png')} alt="Khmer" className="" /></Option>
+                        </Select.Option>
+                        <Select.Option value="km"><img src={uploadImage('uploads/km.png')} alt="Khmer" className="" /></Select.Option>
                     </Select>
                 </div>
 
